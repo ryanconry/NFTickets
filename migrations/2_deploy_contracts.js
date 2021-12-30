@@ -1,5 +1,9 @@
-const NFTickets = artifacts.require("NFTickets");
+const Events = artifacts.require("Events");
+const Ticket = artifacts.require("Ticket");
 
-module.exports = function (deployer) {
-  deployer.deploy(NFTickets);
+module.exports = async function (deployer) {
+  await deployer.deploy(Ticket);
+  const ticket = await Ticket.deployed();
+
+  await deployer.deploy(Events, ticket.address);
 };
