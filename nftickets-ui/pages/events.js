@@ -1,27 +1,55 @@
-import Web3 from "web3";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Button from "react-bootstrap/Button";
 import { AccountsContext, ContractsContext } from "./_app";
+import AddEventModal from "../components/AddEventModal";
 
 export default () => {
   const { events } = useContext(ContractsContext),
-    account = useContext(AccountsContext);
+    account = useContext(AccountsContext),
+    [myEvents, setMyEvents] = useState([]),
+    [allEvents, setAllEvents] = useState([]),
+    [showModal, setShowModal] = useState(false);
 
   useEffect(async () => {
     if (events && account) {
-      // const eventName = "Test Event",
-      //   eventDate = "2022-01-23",
-      //   eventCapacity = 200,
-      //   ticketCost = window.web3.utils.toWei("0.01", "ether");
+      const totalEventsData = await events.methods.totalEvents().call(),
+        totalEvents = parseInt(totalEventsData),
+        myEvs = [],
+        otherEvs = [];
 
-      // await events.methods
-      //   .createEvent(eventName, eventDate, eventCapacity, ticketCost)
-      //   .send({ from: account })
-      //   .on("receipt", () => console.log("added"));
+      for (let i = 1; i <= totalEvents; i++) {
+        const event = await events.methods.events(i).call();
+        event.owner === account ? myEvs.push(event) : otherEvs.push(event);
+      }
 
-      const totalEvents = await events.methods.totalEvents().call(),
-        event = await events.methods.events(totalEvents).call();
+      setMyEvents(myEvs);
+      setAllEvents(otherEvs);
     }
   }, [events, account]);
 
-  return <div>EVENTS</div>;
+  return (
+    <>
+      <Col>
+        <Row style={{ justifyContent: "center" }}>
+          <Button style={{ width: 200 }} onClick={() => setShowModal(true)}>
+            Add Event
+          </Button>
+        </Row>
+        <Row>
+          <h1>My Events ({myEvents.length})</h1>
+        </Row>
+        <Row>
+          <h1>All Events ({allEvents.length})</h1>
+        </Row>
+      </Col>
+      <AddEventModal
+        showModal={showModal}
+        handleClose={() => setShowModal(false)}
+        events={events}
+        account={account}
+      />
+    </>
+  );
 };

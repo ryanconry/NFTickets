@@ -29,7 +29,9 @@ export default ({ children }) => {
           </Nav>
         </Container>
       </Navbar>
-      <main>{children}</main>
+      <Container style={{ padding: "20px 0" }}>
+        <main>{children}</main>
+      </Container>
     </>
   );
 };

@@ -2,6 +2,7 @@ import { useEffect, useState, createContext } from "react";
 import Alert from "react-bootstrap/Alert";
 import Web3 from "web3";
 import "../styles/bootstrap.min.css";
+import "../styles/globals.css";
 import Layout from "../components/layout";
 import Events from "../../src/contract_artifacts/Events.json";
 import Ticket from "../../src/contract_artifacts/Ticket.json";
