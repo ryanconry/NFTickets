@@ -31,7 +31,7 @@ export default ({ showModal, handleClose, events, account }) => {
       keyboard={false}
       centered
     >
-      <Modal.Header closeButton>Add Event</Modal.Header>
+      <Modal.Header closeButton>Create Event</Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="form-group">

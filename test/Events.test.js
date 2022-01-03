@@ -51,15 +51,6 @@ contract("Events", ([eventOwner, eventAttendee, ...accounts]) => {
       assert.equal(createdEvent.cost, ticketCost);
     });
 
-    it("rejects incorrect payment", async () => {
-      await expect(
-        contract.buyTicket(1, 2, {
-          from: eventAttendee,
-          value: web3.utils.toWei("0.015", "ether"),
-        })
-      ).to.be.rejectedWith(Error);
-    });
-
     it("purchases event ticket", async () => {
       const balance = await web3.eth.getBalance(eventOwner),
         numberOfTickets = 2,
