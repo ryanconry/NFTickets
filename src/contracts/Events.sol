@@ -38,11 +38,6 @@ contract Events {
     e.cost = _cost;
   }
 
-  // function isAddressAttending(uint _eventId) public view returns (uint) {
-  //   Event storage _event = events[_eventId];
-  //    return _event.capacity;
-  // }
-
   function isAddressAttending(uint _eventId) public view returns(bool attending) {
     Event storage _event = events[_eventId];
     return _event.attendees[msg.sender];
