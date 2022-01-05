@@ -3,6 +3,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import TransferTicketModal from "../components/TransferTicketModal";
 import { AccountsContext, ContractsContext } from "./_app";
 import { mapTicketsToEvent } from "../utils";
 
@@ -10,7 +11,13 @@ export default () => {
   const { tickets, events } = useContext(ContractsContext),
     account = useContext(AccountsContext),
     [myTickets, setMyTickets] = useState([]),
-    [transferSuccess, setTransferSuccess] = useState(false);
+    [showModal, setShowModal] = useState(false),
+    [transferTicket, setTransferTicket] = useState(""),
+    [transferSuccess, setTransferSuccess] = useState(false),
+    handleClose = () => {
+      setTransferTicket("");
+      setShowModal(false);
+    };
 
   useEffect(async () => {
     if (tickets && account) {
@@ -22,8 +29,9 @@ export default () => {
         ownedTickets[i].eventName = event.name;
       }
       setMyTickets(ownedTickets);
+      transferSuccess && setTransferSuccess(false);
     }
-  }, [tickets, account]);
+  }, [tickets, account, transferSuccess]);
 
   return (
     <>
@@ -45,12 +53,27 @@ export default () => {
               <Card.Footer
                 style={{ display: "flex", justifyContent: "flex-end" }}
               >
-                <Button>Transfer</Button>
+                <Button
+                  onClick={() => {
+                    setTransferTicket(ticketId);
+                    setShowModal(true);
+                  }}
+                >
+                  Transfer
+                </Button>
               </Card.Footer>
             </Card>
           ))}
         </Row>
       </Col>
+      <TransferTicketModal
+        show={showModal}
+        handleClose={handleClose}
+        tickets={tickets}
+        transferTicket={transferTicket}
+        account={account}
+        setTransferSuccess={setTransferSuccess}
+      />
     </>
   );
 };
