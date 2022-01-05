@@ -7,7 +7,7 @@ import CreateEventModal from "../components/CreateEventModal";
 import EventCard from "../components/EventCard";
 
 export default () => {
-  const { events } = useContext(ContractsContext),
+  const { events, tickets } = useContext(ContractsContext),
     account = useContext(AccountsContext),
     [myEvents, setMyEvents] = useState([]),
     [otherEvents, setOtherEvents] = useState([]),
@@ -28,7 +28,7 @@ export default () => {
       setMyEvents(myEvs);
       setOtherEvents(otherEvs);
     }
-  }, [events, account]);
+  }, [events, account, showModal]);
 
   return (
     <>
@@ -57,6 +57,7 @@ export default () => {
               event={event}
               events={events}
               account={account}
+              tickets={tickets}
             />
           ))}
         </Row>

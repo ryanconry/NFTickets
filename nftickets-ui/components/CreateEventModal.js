@@ -10,6 +10,13 @@ export default ({ showModal, handleClose, events, account }) => {
     [isInvalidDate, setIsInvalidDate] = useState(false),
     [capacity, setCapacity] = useState(0),
     [cost, setCost] = useState(0),
+    _handleClose = () => {
+      setEventName("");
+      setDate("");
+      setCapacity(0);
+      setCost(0);
+      handleClose();
+    },
     handleSubmit = async () => {
       await events.methods
         .createEvent(
@@ -19,14 +26,14 @@ export default ({ showModal, handleClose, events, account }) => {
           window.web3.utils.toWei(`${cost}`, "ether")
         )
         .send({ from: account })
-        .on("receipt", handleClose);
+        .on("receipt", _handleClose);
     },
     submitDisabled = !eventName || !date || isInvalidDate || !capacity || !cost;
 
   return (
     <Modal
       show={showModal}
-      onHide={handleClose}
+      onHide={_handleClose}
       backdrop="static"
       keyboard={false}
       centered
@@ -103,7 +110,7 @@ export default ({ showModal, handleClose, events, account }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-secondary" onClick={handleClose}>
+        <Button variant="outline-secondary" onClick={_handleClose}>
           Cancel
         </Button>
         <Button

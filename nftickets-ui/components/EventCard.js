@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import { mapTicketsToEvent } from "../utils";
 
 const result = {
   success: {
@@ -14,7 +15,7 @@ const result = {
   },
 };
 
-export default ({ event, isOwnEvent, events, account }) => {
+export default ({ event, isOwnEvent, events, account, tickets }) => {
   const [purchaseResult, setPurchaseResult] = useState({}),
     [isAttendingEvent, setIsAttendingEvent] = useState(false),
     isEventFull = event.attending === event.capacity,
@@ -41,11 +42,11 @@ export default ({ event, isOwnEvent, events, account }) => {
   }
 
   useEffect(async () => {
-    if (events && account) {
-      const attending = await events.methods
-        .isAddressAttending(event.id)
-        .call({ from: account });
-      attending && setIsAttendingEvent(attending);
+    if (tickets && account) {
+      const ownedTickets = await mapTicketsToEvent(tickets, account);
+      ownedTickets.forEach(({ eventId }) => {
+        eventId === event.id && setIsAttendingEvent(true);
+      });
     }
   }, [purchaseResult]);
 

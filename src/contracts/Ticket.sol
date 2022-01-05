@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 contract Ticket is ERC721Enumerable {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
-  mapping(uint => uint) eventMapping;
+  mapping(uint => uint) public eventMapping;
 
     constructor() ERC721("NFTicket", "NFTKT") {
     }
